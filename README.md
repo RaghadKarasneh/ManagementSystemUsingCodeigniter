@@ -8,6 +8,7 @@
 - [Prerequisites](#prerequisites)
 - [Installation and Configuration](#installation-and-configuration)
 - [Endpoints](#endpoints)
+- [Run the migrations and seeders](#run-the-migrations-and-seeders)
 
 
 
@@ -76,9 +77,11 @@ database.default.port = 3306
 
     - DELETE /tasks/{id}: to delete a specific task.
 
-## Seeders
+## Run the migrations and seeders
 
-You can run the following commands to add the seeders records to the database:
+You can run the following commands to run the migrations and add the seeders records to the database:
+
+- php spark migrate
 
 - php spark db:seed UserSeeder
 
