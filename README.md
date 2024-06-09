@@ -1,68 +1,77 @@
-# CodeIgniter 4 Application Starter
+# Tasks Management System
 
-## What is CodeIgniter?
+ RESTful API for a simple task management system using CodeIgniter 4. The APIs allow users to create, read, update, and delete tasks. Each task have a title, description, status, and due date. Additionally, the assignment involves implementing JWT for user authentication.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+ ## Table of Contents
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+- [Prerequisites](#prerequisites)
+- [Installation and Configuration](#installation-and-configuration)
+- [Endpoints](#endpoints)
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
 
-## Installation & updates
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+## Prerequisites
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+Please be sure that you have the following requirements to run the project successfully:
 
-## Setup
+- PHP 8.1 or later
+- CodeIgniter 4
+- Composer installed
+- MySQL
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+## Installation and configuration
 
-## Important Change with index.php
+Please follow the following steps:
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+1- Clone the project using this command : 
+git clone https://github.com/RaghadKarasneh/ManagementSystemUsingCodeigniter.git
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+2- Run the following commands:
 
-**Please** read the user guide for a better explanation of how CI4 works!
+- cd ManagementSystemUsingCodeigniter
+- composer install
+- cp .env.example .env
 
-## Repository Management
+3- Configure the .env file with your database credentials:
+### Database configuration:
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+database.default.hostname = localhost
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+database.default.database = your_database_name
 
-## Server Requirements
+database.default.username = your_database_username
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+database.default.password = your_database_password
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+database.default.DBDriver = MySQLi
 
-> [!WARNING]
-> The end of life date for PHP 7.4 was November 28, 2022.
-> The end of life date for PHP 8.0 was November 26, 2023.
-> If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> The end of life date for PHP 8.1 will be November 25, 2024.
+database.default.DBPrefix =
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+database.default.port = 3306
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+### Generate JWT Secret Key:
+- The JWT Secret Key is a crucial component for securing authentication in the application. It is used to sign JWT tokens, ensuring that they are not tampered with during transmission between the client and server.
+- To generate JWT Secret Key, you need a random 32 bytes key, and add it to the .env file ( JWT_SECRET = key_value ). Here are some ways to generate the key:
+
+    - Run the following command to generate JWT_SECRET: node -e "console.log(require('crypto').randomBytes(32).toString('hex'));"    
+
+    - Online Generator: such as RandomKeygen tool.
+
+## Endpoints
+- You will find below the endpoints of the application:
+    ### Authentication Endpoints
+    - POST /auth/register : to register a new account.
+
+    - POST /auth/login : to login within an existing account. 
+
+    ### Task Endpoints
+    - GET /tasks : to retrieve all tasks.
+
+    - POST /tasks : to create a new task.
+
+    - GET /tasks/{id} : to retrieve a specific task.
+
+    - PUT /tasks/{id}: to update a spcific task.
+
+    - DELETE /tasks/{id}: to delete a specific task.
