@@ -48,7 +48,7 @@ class UserController extends BaseController
             if ($user->insert($created_data)) { // Create new user
                 $response = [
                     'status'   => 200,
-                    'messages' => 'User registered successfully',
+                    'message' => 'User registered successfully',
                 ];
                 return $this->response
                     ->setStatusCode(ResponseInterface::HTTP_OK)
@@ -56,7 +56,7 @@ class UserController extends BaseController
             } else {
                 $response = [
                     'status'  => ResponseInterface::HTTP_BAD_REQUEST,
-                    'messages' => 'Failed to register user',
+                    'message' => 'Failed to register user',
                     'errors'   => $user->errors(),
                 ];
 
@@ -123,7 +123,7 @@ public function login(){
             // Handle invalid username or password
             $response = [
                 'status'  => ResponseInterface::HTTP_UNAUTHORIZED,
-                'messages' => 'Invalid username or password',
+                'message' => 'Invalid username or password',
             ];
 
             return $this->response

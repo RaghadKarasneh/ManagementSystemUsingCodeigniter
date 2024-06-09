@@ -121,4 +121,59 @@ class TaskController extends ResourceController
             return $this->response->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR)->setJSON(['error' => 'An error occurred while retrieving the task']);
         }
     }
+    //   ==================================================================
+    //   ======================= Update Function ==========================
+    //   ==================================================================
+    public function update($id = null)
+    {
+        try {
+            // Collect request data
+            $updated_data = [
+                'title' => $this->request->getVar('title'),
+                'description' => $this->request->getVar('description'),
+                'status' => $this->request->getVar('status'),
+                'due_date' => $this->request->getVar('due_date'),
+            ];
+
+            // Validate the request data
+            $taskValidation = new TaskValidation($this->validation);
+            $validationResponse = $taskValidation->validate($updated_data);
+            
+            if ($validationResponse !== true) {// Stop the update task process if any request does not match its rules
+                return $this->response
+                    ->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
+                    ->setJSON($validationResponse);
+            }
+
+            $task = new Task();
+            $existingTask = $task->find($id);
+            
+            if (!$existingTask) {
+                return $this->response
+                    ->setStatusCode(ResponseInterface::HTTP_NOT_FOUND)
+                    ->setJSON(['message' => 'Task not found']);
+            }
+
+            $task->update($id, $updated_data);
+
+            return $this->response
+                ->setStatusCode(ResponseInterface::HTTP_OK)
+                ->setJSON([
+                    'id' => $id,
+                    'title' => $updated_data['title'],
+                    'description' => $updated_data['description'],
+                    'status' => $updated_data['status'],
+                    'due_date' => $updated_data['due_date'],
+                ]);
+        } catch (Exception $e) {
+            $errorResponse = [
+                'status'  => ResponseInterface::HTTP_BAD_REQUEST,
+                'message' => 'Update failed!',
+                'error'   => $e->getMessage(),
+            ];
+            return $this->response
+                ->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
+                ->setJSON($errorResponse);
+        }
+    }
 }

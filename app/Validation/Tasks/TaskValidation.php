@@ -48,7 +48,7 @@ class TaskValidation
         if (!$this->validation->run($data)) {
             return [
                 'status'   => ResponseInterface::HTTP_BAD_REQUEST,
-                'messages' => 'Validation failed',
+                'message' => 'Validation failed',
                 'errors'   => $this->validation->getErrors(),
             ];
         }
