@@ -75,3 +75,11 @@ database.default.port = 3306
     - PUT /tasks/{id}: to update a spcific task.
 
     - DELETE /tasks/{id}: to delete a specific task.
+
+## Seeders
+
+You can run the following commands to add the seeders records to the database:
+
+- php spark db:seed UserSeeder
+
+- php spark db:seed TaskSeeder
