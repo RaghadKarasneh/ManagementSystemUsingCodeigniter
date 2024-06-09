@@ -4,9 +4,11 @@ namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
 use App\Models\User;
+use App\Validation\Users\LoginUserValidation;
 use App\Validation\Users\RegisterUserValidation;
 use CodeIgniter\HTTP\ResponseInterface;
 use Exception;
+use Firebase\JWT\JWT;
 
 class UserController extends BaseController
 {
@@ -73,4 +75,71 @@ class UserController extends BaseController
                 ->setJSON($errorResponse);
         }
     }
+    //   ==================================================================
+//   ======================== Login Function ==========================
+//   ==================================================================
+public function login(){
+    try {
+        // Collect request data
+        $created_data = [
+            'username' => $this->request->getVar('username'),
+            'password' => $this->request->getVar('password'),
+        ];
+
+        // Validate the login data
+        $loginValidation = new LoginUserValidation($this->validation);
+        $validationResponse = $loginValidation->validate($created_data);
+
+        // To stop the login process if any request is not match its rules 
+        if ($validationResponse !== true) {
+            return $this->response
+                ->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
+                ->setJSON($validationResponse);
+        }
+
+        // Retrieve user by username
+        $user = (new User())->where('username', $created_data['username'])->first();
+
+        // Check if user exists and password matches
+        if ($user && password_verify($created_data['password'], $user['password'])) {
+            
+            $key = getenv('JWT_SECRET'); 
+            $iat = time(); // Issued at time => Unix timestamp
+            $payload = [
+                'iat' => $iat,
+                'exp' => $iat + 3600, // Expiration time => Unix timestamp
+                'uid' => $user['id'],
+            ];
+            $token = JWT::encode($payload, $key, 'HS256'); // Generate JWT token
+
+            $response = [
+                'status'   => 200,
+                'token'    => $token
+            ];
+            return $this->response
+                ->setStatusCode(ResponseInterface::HTTP_OK)
+                ->setJSON($response);
+        } else {
+            // Handle invalid username or password
+            $response = [
+                'status'  => ResponseInterface::HTTP_UNAUTHORIZED,
+                'messages' => 'Invalid username or password',
+            ];
+
+            return $this->response
+                ->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED)
+                ->setJSON($response);
+        }
+    } catch (Exception $e) {
+        // Handle exceptions
+        $errorResponse = [
+            'status'  => ResponseInterface::HTTP_BAD_REQUEST,
+            'message' => 'Login failed!',
+            'error'   => $e->getMessage(),
+        ];
+        return $this->response
+            ->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
+            ->setJSON($errorResponse);
+    }
+}
 }
