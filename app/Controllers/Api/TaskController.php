@@ -93,12 +93,32 @@ class TaskController extends ResourceController
         } catch (Exception $e) {
             $errorResponse = [
                 'status'  => ResponseInterface::HTTP_BAD_REQUEST,
-                'message' => 'Login failed!',
+                'message' => 'Task creation failed!',
                 'error'   => $e->getMessage(),
             ];
             return $this->response
                 ->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
                 ->setJSON($errorResponse);
+        }
+    }
+
+    //   ==================================================================
+    //   ======================== Show Function ===========================
+    //   ==================================================================
+
+    public function show($id = null)
+    { 
+        try {
+            $task = new Task();
+            $task = $task->find($id);
+            
+            if ($task === null) { // Check if the task exists
+                return $this->response->setStatusCode(ResponseInterface::HTTP_NOT_FOUND)->setJSON(['error' => 'Task not found']);
+            }
+
+            return $this->respond($task);
+        } catch (Exception $e) {
+            return $this->response->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR)->setJSON(['error' => 'An error occurred while retrieving the task']);
         }
     }
 }

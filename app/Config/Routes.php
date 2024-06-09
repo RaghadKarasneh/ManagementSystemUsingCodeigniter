@@ -18,4 +18,5 @@ $routes->group('auth', function ($routes) {
 $routes->group('tasks', ['filter' => 'auth'], function($routes) {
     $routes->get('/', 'Api\TaskController::index'); // Retrieve All Tasks
     $routes->post('/', 'Api\TaskController::create'); // Create a Task
+    $routes->get('(:num)', 'Api\TaskController::show/$1'); // Retrieve a Specific Task
 });
