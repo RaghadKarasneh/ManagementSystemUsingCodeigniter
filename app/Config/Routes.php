@@ -20,4 +20,5 @@ $routes->group('tasks', ['filter' => 'auth'], function($routes) {
     $routes->post('/', 'Api\TaskController::create'); // Create a Task
     $routes->get('(:num)', 'Api\TaskController::show/$1'); // Retrieve a Specific Task
     $routes->put('(:num)', 'Api\TaskController::update/$1'); // Update a Task
+    $routes->delete('(:num)', 'Api\TaskController::delete/$1'); // Delete a Task
 });

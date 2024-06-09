@@ -176,4 +176,35 @@ class TaskController extends ResourceController
                 ->setJSON($errorResponse);
         }
     }
+     //   ==================================================================
+    //   ======================= Delete Function ==========================
+    //   ==================================================================
+    public function delete($id = null)
+    {
+        try {
+            $task = new Task();
+            $existingTask = $task->find($id);
+
+            if (!$existingTask) {
+                return $this->response
+                    ->setStatusCode(ResponseInterface::HTTP_NOT_FOUND)
+                    ->setJSON(['message' => 'Task not found']);
+            }
+
+            $task->delete($id);
+
+            return $this->response
+                ->setStatusCode(ResponseInterface::HTTP_NO_CONTENT);
+        } catch (Exception $e) {
+            // Handle exceptions
+            $errorResponse = [
+                'status'  => ResponseInterface::HTTP_BAD_REQUEST,
+                'message' => 'Delete failed!',
+                'error'   => $e->getMessage(),
+            ];
+            return $this->response
+                ->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
+                ->setJSON($errorResponse);
+        }
+    }
 }
