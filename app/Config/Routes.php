@@ -14,3 +14,7 @@ $routes->group('auth', function ($routes) {
     $routes->post('login', 'Api\UserController::login');
 });
 
+// ============================= Tasks Routes ==============================
+$routes->group('tasks', ['filter' => 'auth'], function($routes) {
+    $routes->get('/', 'Api\TaskController::index'); // Retrieve All Tasks
+});
